@@ -1,5 +1,7 @@
 #DDos Log Analysis Program
 
+from ipwhois import IPWhois
+
 def read_log_file(filename):
     lines = []
     with open(filename, "r", encoding="utf-8") as f:
@@ -63,6 +65,22 @@ def classify_ip(ip):
 
 
 
+def lookup_ip_info(ip):
+    try:
+        obj = IPWhois(ip)
+        data = obj.lookup_rdap()
+
+        network = data.get("network", {})
+        country = network.get("country", "Unknown")
+        description = network.get("name", "No description")
+
+        return country, description
+    except:
+        return "Unknown", "Lookup failed"
+
+
+
+
 
 
 
@@ -73,8 +91,9 @@ def main():
     unique_ips = get_unique_ips(lines)
 
     for ip in sorted(unique_ips):
-        print(ip, "-> Class", classify_ip(ip))
-
+        ip_class = classify_ip(ip)
+        country, desc = lookup_ip_info(ip)
+        print(ip, ip_class, country, desc)
 
 
 
