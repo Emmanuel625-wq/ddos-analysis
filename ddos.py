@@ -37,6 +37,31 @@ def write_ips_file(ip_set, filename):
             f.write(ip + "\n")
 
 
+def classify_ip(ip):
+    parts = ip.split(".")
+    if len(parts) != 4:
+        return "Unknown"
+
+    try:
+        first = int(parts[0])
+    except:
+        return "Unknown"
+
+    if 1 <= first <= 126:
+        return "A"
+    elif 128 <= first <= 191:
+        return "B"
+    elif 192 <= first <= 223:
+        return "C"
+    elif 224 <= first <= 239:
+        return "D"
+    elif 240 <= first <= 254:
+        return "E"
+    else:
+        return "Unknown"
+
+
+
 
 
 
@@ -46,7 +71,10 @@ def write_ips_file(ip_set, filename):
 def main():
     lines = read_log_file("DDoSRawLog.txt")
     unique_ips = get_unique_ips(lines)
-    write_ips_file(unique_ips, "unique_ips.txt")
+
+    for ip in sorted(unique_ips):
+        print(ip, "-> Class", classify_ip(ip))
+
 
 
 
