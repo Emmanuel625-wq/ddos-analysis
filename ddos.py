@@ -22,6 +22,16 @@ def extract_ip_from_line(line):
 
     return line[ip_start:ip_end].strip()
 
+def get_unique_ips(lines):
+    ip_set = set()
+    for line in lines:
+        ip = extract_ip_from_line(line)
+        if ip:
+            ip_set.add(ip)
+    return ip_set
+
+
+
 
 
 
