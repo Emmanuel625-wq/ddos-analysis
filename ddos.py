@@ -77,6 +77,20 @@ def lookup_ip_info(ip):
         return country, description
     except:
         return "Unknown", "Lookup failed"
+    
+def write_report_file(ip_info_list, filename):
+    with open(filename, "w", encoding="utf-8") as f:
+        for info in ip_info_list:
+            f.write(f"IP Address: {info['ip']}\n")
+            f.write(f"Class: {info['class']}\n")
+            f.write(f"Country: {info['country']}\n")
+            f.write(f"Description: {info['description']}\n")
+            f.write("-" * 40 + "\n")
+
+    
+
+
+    
 
 
 
@@ -90,10 +104,20 @@ def main():
     lines = read_log_file("DDoSRawLog.txt")
     unique_ips = get_unique_ips(lines)
 
+    ip_info_list = []
     for ip in sorted(unique_ips):
         ip_class = classify_ip(ip)
         country, desc = lookup_ip_info(ip)
-        print(ip, ip_class, country, desc)
+
+        ip_info_list.append({
+            "ip": ip,
+            "class": ip_class,
+            "country": country,
+            "description": desc
+        })
+
+    write_ips_file(unique_ips, "ips.txt")
+    write_report_file(ip_info_list, "report.txt")
 
 
 
