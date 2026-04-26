@@ -6,12 +6,33 @@ def read_log_file(filename):
         for line in f:
             line.append(line.rstrip("\n"))
             return lines
+        
+
+
+def extract_ip_from_line(line):
+    marker = "[client "
+    start = line.find(marker)
+    if start == -1:
+        return None
+
+    ip_start = start + len(marker)
+    ip_end = line.find("]", ip_start)
+    if ip_end == -1:
+        return None
+
+    return line[ip_start:ip_end].strip()
+
 
 
 
 
 def main():
-    pass
+    lines = read_log_file("DDoSRawLog.txt")
+    for line in lines[:5]:
+        print(extract_ip_from_line(line))
+
+
+
 
 if __name__ == "__main__":
     main()
