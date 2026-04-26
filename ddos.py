@@ -31,6 +31,13 @@ def get_unique_ips(lines):
     return ip_set
 
 
+def write_ips_file(ip_set, filename):
+    with open(filename, "w", encoding="utf-8") as f:
+        for ip in sorted(ip_set):
+            f.write(ip + "\n")
+
+
+
 
 
 
@@ -38,8 +45,9 @@ def get_unique_ips(lines):
 
 def main():
     lines = read_log_file("DDoSRawLog.txt")
-    for line in lines[:5]:
-        print(extract_ip_from_line(line))
+    unique_ips = get_unique_ips(lines)
+    write_ips_file(unique_ips, "unique_ips.txt")
+
 
 
 
